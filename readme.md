@@ -1,4 +1,4 @@
-repave.ps1
+repave.psm1
 ==========
 
 A PowerShell module that allows you to easily create a terse re-pave script for a Windows Machine making heavy use of Chocolatey.
