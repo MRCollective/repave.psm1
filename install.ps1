@@ -29,10 +29,13 @@ function Set-TortoiseGitToUseSshKeys() {
 }
 
 function Set-TaskBarPin($path, $exe) {
-    $shell = new-object -com "Shell.Application"  
-    $folder = $shell.Namespace($path)    
-    $item = $folder.Parsename($exe)
-    $item.invokeverb("taskbarpin")
+    if (Test-Path "$path\$exe") {
+        Write-Output "Pinning $path\$exe to the taskbar`r`n"
+        $shell = new-object -com "Shell.Application"  
+        $folder = $shell.Namespace($path)    
+        $item = $folder.Parsename($exe)
+        $item.invokeverb("taskbarpin")
+    }
 }
 
 function Install-VSExtension($vsixUrl) {
@@ -301,6 +304,14 @@ try
 
     # Pin to taskbar
     Set-TaskBarPin "C:\Program Files (x86)\Google\Chrome\Application" "chrome.exe"
+    Set-TaskBarPin "C:\Program Files\Microsoft Office\Office15" "outlook.exe"
+    Set-TaskBarPin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE" "devenv.exe"
+    Set-TaskBarPin "C:\Program Files (x86)\LINQPad4" "linqpad.exe"
+    Set-TaskBarPin "C:\Program Files\Microsoft Office\Office15" "lync.exe"
+    Set-TaskBarPin "C:\Program Files\Microsoft Office\Office15" "onenote.exe"
+    Set-TaskBarPin "C:\Windows\system32" "mstsc.exe"
+    Set-TaskBarPin "C:\Program Files (x86)\Microsoft SQL Server\110\Tools\Binn\ManagementStudio" "Ssms.exe"
+    Set-TaskBarPin "C:\Program Files\Paint.NET" "PaintDotNet.exe"
     
     # Final warnings
     $temp = [IO.Path]::GetTempPath()
