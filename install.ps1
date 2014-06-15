@@ -286,16 +286,14 @@ try
             }
         }
 
-        #if (-not (Test-Path "C:\Program Files\Microsoft SQL Server\MSSQL12.SQLEXPRESS")) {
-        #    Write-Output "Installing SQL Server 2014 Express`r`n"
-        #    if (-not (Test-Path "Installers\SQLEXPRWT_x64_ENU.exe")) {
-        #        # todo: Why isn't this working?
-        #        (new-object net.webclient).DownloadFile("http://care.dlservice.microsoft.com/dl/download/E/A/E/EAE6F7FC-767A-4038-A954-49B8B05D04EB/SQLEXPRWT_x64_ENU.exe", "Installers\SQLEXPRWT_x64_ENU.exe")
-        #    }
-        #    Start-Process -FilePath "Installers\SQLEXPRWT_x64_ENU.exe" -ArgumentList "/QUIETSIMPLE /ACTION=install /FEATURES=SQL,Tools" -Wait
-        #} else {
-        #    Write-Output "Azure Management Studio already installed`r`n"
-        #}
+        if (-not (Test-Path "C:\Program Files\Microsoft SQL Server\MSSQL12.SQLEXPRESS")) {
+            Write-Output "Installing SQL Server 2014 Express`r`n"
+            if (Test-Path "Installers\SQLEXPRWT_x64_ENU\setup.exe") {
+                Installers\SQLEXPRWT_x64_ENU\setup.exe /QUIETSIMPLE /ACTION=install /FEATURES=SQL,Tools /IAcceptSQLServerLicenseTerms
+            }
+        } else {
+            Write-Output "SQL Server 2014 Express already installed`r`n"
+        }
     } else {
         Install-ChocolateyPackage notepadplusplus
         Install-ChocolateyPackage vlc
