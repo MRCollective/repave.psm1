@@ -25,7 +25,7 @@ Invoke-Repave {
 }
 ```
 
-When you run it you must be in admin mode and after running there will be an `repave.log` file with the output and any warnings for further action (unless you ran the script from PowerShell ISE, in which case there is no transcript).
+When you run it you must be in admin mode and after running there will be an `repave.log` file with the output and a `todo.txt` file with items for further action (unless you ran the script from PowerShell ISE, in which case there is no `repave.log`).
 
 Functions
 ---------
@@ -220,3 +220,7 @@ Installs Hyper-V from Windows Features.
 ### Install-SQLServerExpress2014AndManagementStudio
 
 If you have downloaded [SQLEXPRWT_x64_ENU.exe](http://care.dlservice.microsoft.com/dl/download/E/A/E/EAE6F7FC-767A-4038-A954-49B8B05D04EB/SQLEXPRWT_x64_ENU.exe) and extracted it to `Installers\SQLEXPRWT_x64_ENU\` then it will install SQL Server Express 2014 and SQL Server Management Studio from that location.
+
+### Add-Todo $message
+
+Writes a warning of $message and appends that message to `todo.txt`.

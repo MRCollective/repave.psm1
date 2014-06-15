@@ -20,7 +20,7 @@
         &$script
 
         $temp = [IO.Path]::GetTempPath()
-        Write-Warning "Clear out $temp`r`n"
+        Add-Todo "Clear out $temp"
 
         if ($InTranscript) {
             Stop-Transcript
@@ -57,7 +57,7 @@ function Install-Chocolatey() {
         Write-Output "Installing Chocolatey`r`n"
         iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))
         Add-ToPath "c:\chocolatey\bin"
-        Write-Warning "If the next command fails then (if needed, restart powershell) and run the script again to update the path variables properly`r`n"
+        Write-Warning "If the next command fails then restart powershell and run the script again to update the path variables properly`r`n"
     }
 }
 
@@ -66,6 +66,7 @@ function Install-WebPI() {
         Write-Output "webpicmd already installed`r`n"
     } else {
         cinst webpicmd -Version 7.1.1374 | Out-Default # Latest version has a bug
+        cinst NetFx3 -Source WindowsFeatures | Out-Default
     }
 }
 
@@ -108,7 +109,7 @@ function Install-IntelRST() {
             (new-object net.webclient).DownloadFile('http://downloadmirror.intel.com/23496/eng/SetupRST.exe', 'Installers\SetupRST.exe')
         }
         Start-Process -FilePath Installers\SetupRST.exe -Wait
-        Write-Warning "Check http://files.thecybershadow.net/trimcheck/trimcheck-0.6.exe`r`n"
+        Add-Todo "Check http://files.thecybershadow.net/trimcheck/trimcheck-0.6.exe"
     }
 }
 
@@ -152,7 +153,7 @@ function Install-VisualStudio2013($product, $features, $onInstall) {
     }
     Install-ChocolateyPackage "VisualStudio2013$product" "/Features:'$vsFeatures'"
 
-    Write-Warning "Open Visual Studio and log in with MSDN credentials`r`n"
+    Add-Todo "Open Visual Studio and log in with MSDN credentials"
     if ($onInstall -ne $null) {
         &$onInstall
     }
@@ -166,7 +167,7 @@ function Install-VisualStudio2013Iso($iso, $onInstall) {
         Start-Process -FilePath "$($mount.DriveLetter):\vs_ultimate.exe" -ArgumentList "/passive /norestart" -Wait
         Dismount-DiskImage $iso
 
-        Write-Warning "Open Visual Studio and log in with MSDN credentials`r`n"
+        Add-Todo "Open Visual Studio and log in with MSDN credentials"
         if ($onInstall -ne $null) {
             &$onInstall
         }
@@ -180,7 +181,7 @@ function Restore-ReSharperExtensions($pathToPackagesConfig) {
         Write-Output "Adding $pathToPackagesConfig to ReSharper`r`n"
         mkdir "$env:APPDATA\JetBrains\ReSharper\vAny" -ErrorAction SilentlyContinue | Out-Null
         cp $pathToPackagesConfig "$env:APPDATA\JetBrains\ReSharper\vAny"
-        Write-Warning "Open ReSharper Extension Manager and click to restore packages`r`n"
+        Add-Todo "Open ReSharper Extension Manager and click to restore packages"
     } else {
         Write-Output "ReSharper extensions already installed`r`n"
     }
@@ -202,7 +203,7 @@ function Install-Office2013Iso($iso, $msp) {
         $mount = Mount-DiskImage $iso -PassThru | Get-Volume
         Start-Process -FilePath "$($mount.DriveLetter):\setup.exe" -ArgumentList "/adminfile ""$msp""" -Wait
         Dismount-DiskImage $iso
-        Write-Warning "Open Office program and enter product key`r`n"
+        Add-Todo "Open Office program and enter product key"
     } else {
         Write-Output "Office 2013 already installed`r`n"
     }
@@ -311,7 +312,7 @@ function Install-ITunesMusicLibrary($pathToMusicLibrary) {
 }
 
 function Install-AzureManagementStudio() {
-    if (-not (Test-Path "$env:APPDATA\Cerebrata\AzureManagementStudio")) {
+    if (-not (Test-Path "$env:APPDATA\Cerebrata Software\AMS")) {
         Write-Output "Installing Azure Management Studio`r`n"
         if (-not (Test-Path "Installers\AzureManagementStudio.exe")) {
             # todo: Why isn't this working?
@@ -319,7 +320,7 @@ function Install-AzureManagementStudio() {
         }
         & Installers\AzureManagementStudio.exe | Out-Default
         # todo: get this to actually install
-        Write-Warning "Add Azure Management Studio license key"
+        Add-Todo "Add Azure Management Studio license key"
     } else {
         Write-Output "Azure Management Studio already installed`r`n"
     }
@@ -328,6 +329,7 @@ function Install-AzureManagementStudio() {
 function Install-HyperV() {
     if (-not (Test-Path "C:\Program Files\Hyper-V")) {
         cinst Microsoft-Hyper-V -Source WindowsFeatures | Out-Default
+        Write-Warning "Until you restart your computer Hyper-V will not be enabled"
     } else {
         Write-Output "HyperV already installed`r`n"
     }
@@ -337,13 +339,18 @@ function Install-SQLServerExpress2014AndManagementStudio() {
     if (-not (Test-Path "C:\Program Files\Microsoft SQL Server\MSSQL12.SQLEXPRESS")) {
         Write-Output "Installing SQL Server 2014 Express`r`n"
         if (Test-Path "Installers\SQLEXPRWT_x64_ENU\setup.exe") {
-            Installers\SQLEXPRWT_x64_ENU\setup.exe /QUIETSIMPLE /ACTION=install /FEATURES=SQL,Tools /IAcceptSQLServerLicenseTerms
+            Installers\SQLEXPRWT_x64_ENU\setup.exe /QUIETSIMPLE /ACTION=install /FEATURES=SQL,Tools /IAcceptSQLServerLicenseTerms /INSTANCENAME="SQLExpress"
         } else {
             throw "Download http://care.dlservice.microsoft.com/dl/download/E/A/E/EAE6F7FC-767A-4038-A954-49B8B05D04EB/SQLEXPRWT_x64_ENU.exe and extract to Installers\SQLEXPRWT_x64_ENU"
         }
     } else {
         Write-Output "SQL Server 2014 Express already installed`r`n"
     }
+}
+
+function Add-Todo($message) {
+    Write-Warning "$message`r`n"
+    Add-Content "todo.txt" "$message`r`n"
 }
 
 Export-ModuleMember -Function *

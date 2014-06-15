@@ -57,11 +57,11 @@ Invoke-Repave {
     Install-ChocolateyPackage vim
     Install-ChocolateyPackage lockhunter
     Install-ChocolateyPackage paint.net
-    Install-ChocolateyPackage linqpad4 -RunIfInstalled { Write-Warning "Register linqpad via: LINQPad.exe -activate=PRODUCT_CODE`r`n" }
+    Install-ChocolateyPackage linqpad4 -RunIfInstalled { Add-Todo "Register linqpad via: LINQPad.exe -activate=PRODUCT_CODE" }
     
     # Internet
     Install-ChocolateyPackage GoogleChrome
-    Install-ChocolateyPackage Firefox -RunIfInstalled { Write-Warning "Set Firefox to not auto-update if using for Selenium testing`r`n" }
+    Install-ChocolateyPackage Firefox -RunIfInstalled { Add-Todo "Set Firefox to not auto-update if using for Selenium testing" }
     Install-ChocolateyPackage Skype
     Install-ChocolateyPackage Dropbox
     Install-ChocolateyPackage lastpass
@@ -71,7 +71,7 @@ Invoke-Repave {
     Install-OutlookSignatures "Signatures"
 
     # Other
-    Install-ChocolateyPackage steam -RunIfInstalled { Write-Warning "Restore game backups and save games" }
+    Install-ChocolateyPackage steam -RunIfInstalled { Add-Todo "Restore game backups and save games" }
     Install-ChocolateyPackage nodejs.install
     Install-ChocolateyPackage ruby
     Install-ITunesMusicLibrary "iTunes"
@@ -91,12 +91,17 @@ Invoke-Repave {
     Set-TaskBarPinRDP
     Set-TaskBarPinSSMS
     Set-TaskBarPinPaintDotNet
+
+    # Todo
+    # Shift 5 times
+    # Chrome Extensions
+    # Default programs
     
     # Final warnings
     if ($update -eq "false") {
-        Write-Warning "Check device manager for missing drivers; check graphics drivers; check laptop special buttons work`r`n"
-        Write-Warning "Install printers"
-        Write-Warning "Configure power options`r`n"
-        Write-Warning "Run Windows Update`r`n"
+        Add-Todo "Check device manager for missing drivers; check graphics drivers; check laptop special buttons work"
+        Add-Todo "Install printers"
+        Add-Todo "Configure power options"
+        Add-Todo "Run Windows Update"
     }
 }
