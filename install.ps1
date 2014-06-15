@@ -25,7 +25,7 @@ function Set-ExplorerOptions() {
 
 function Set-TortoiseGitToUseSshKeys() {
     Write-Output "Configuring TortoiseGit to use SSH rather than PLink`r`n"
-    Set-ItemProperty "HKCU:\Software\TortoiseGit" SSH "C:\Program Files\TortoiseGit\bin\ssh.exe"
+    Set-ItemProperty "HKCU:\Software\TortoiseGit" SSH "C:\Program Files (x86)\Git\bin\ssh.exe"
 }
 
 function Set-TaskBarPin($path, $exe) {
@@ -265,11 +265,13 @@ try
     }
 
     # Pin to taskbar
+
     
     # Final warnings
     $temp = [IO.Path]::GetTempPath()
     Write-Warning "Clear out $temp`r`n"
     Write-Warning "Check device manager for missing drivers; check graphics drivers; check laptop special buttons work`r`n"
+    Write-Warning "Install printers"
     Write-Warning "Configure power options`r`n"
 
     if ($InTranscript) {
@@ -285,3 +287,4 @@ catch
     }
     exit 1
 }
+
