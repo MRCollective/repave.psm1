@@ -1,0 +1,6 @@
+[branch]
+	autosetuprebase = always
+[alias]
+	st = status
+[core]
+	autocrlf = false
