@@ -56,26 +56,6 @@ function Install-ChocolateyPackage($packageName, $installArgs) {
     }
 }
 
-function Start-AndLogProcess($exe, $args) {
-    $pinfo = New-Object System.Diagnostics.ProcessStartInfo
-    $pinfo.FileName = $exe
-    $pinfo.RedirectStandardError = $true
-    $pinfo.RedirectStandardOutput = $true
-    $pinfo.UseShellExecute = $false
-    $pinfo.Arguments = $args
-    $p = New-Object System.Diagnostics.Process
-    $p.StartInfo = $pinfo
-    $p.Start()
-    $p.WaitForExit()
-    $stdout = $p.StandardOutput.ReadToEnd()
-    $stderr = $p.StandardError.ReadToEnd()
-    Write-Output $stdout
-
-    if ($p.ExitCode -ne 0) {
-        throw $stderr
-    }
-}
-
 $ErrorActionPreference = "Stop"
 $InTranscript = $Host.Name -ne "Windows PowerShell ISE Host"
 if ($InTranscript) {
@@ -232,13 +212,6 @@ try
     Install-ChocolateyPackage windirstat
     Install-ChocolateyPackage 7zip
     Install-ChocolateyPackage AdobeReader
-    if ($isRob) {
-        Install-ChocolateyPackage vim
-    } else {
-        Install-ChocolateyPackage notepadplusplus
-        Install-ChocolateyPackage vlc
-    }
-    Write-Warning "Install Cisco AnyConnect, Photoshop`r`n"
     
     # Internet
     Install-ChocolateyPackage GoogleChrome
@@ -262,14 +235,72 @@ try
     }
     if (-not (Test-Path "$env:APPDATA\Microsoft\Signatures")) {
         if (Test-Path "Signatures") {
+            Write-Output "Copying in Outlook signatures`r`n"
             cp Signatures "$env:APPDATA\Microsoft" -Recurse
         }
     } else {
         Write-Output "Outlook signatures already installed`r`n"
     }
 
-    # Pin to taskbar
+    # Other
+    if ($isRob) {
+        Install-ChocolateyPackage vim
+        Install-ChocolateyPackage steam
+        Write-Warning "Restore game backups and save games"
+        Install-ChocolateyPackage lastpass
+        Install-ChocolateyPackage lockhunter
+        Install-ChocolateyPackage nodejs.install
+        Install-ChocolateyPackage ruby
+        Install-ChocolateyPackage paint.net
+        Install-ChocolateyPackage linqpad4
+        Write-Warning "Register linqpad via: LINQPad.exe -activate=PRODUCT_CODE`r`n"
+        if (-not (Test-Path "~\Music\iTunes")) {
+            if (Test-Path "iTunes") {
+                Write-Output "Copying in iTunes library`r`n"
+                cp iTunes "~\Music" -Recurse
+            }
+        } else {
+            Write-Output "iTunes library already installed`r`n"
+        }
+        Install-ChocolateyPackage iTunes
+        if (-not (Test-Path "$env:APPDATA\Cerebrata\AzureManagementStudio")) {
+            Write-Output "Installing Azure Management Studio`r`n"
+            if (-not (Test-Path "Installers\AzureManagementStudio.exe")) {
+                # todo: Why isn't this working?
+                (new-object net.webclient).DownloadFile("http://installers.cerebrata.com/setup/Azure%20Management%20Studio/production/1/Azure%20Management%20Studio.exe", "Installers\AzureManagementStudio.exe")
+            }
+            & Installers\AzureManagementStudio.exe | Out-Default
+            # todo: get this to actually install
+            Write-Warning "Add Azure Management Studio license key"
+        } else {
+            Write-Output "Azure Management Studio already installed`r`n"
+        }
+        if (-not (Test-VirtualMachine)) {
+            if (-not (Test-Path "C:\Program Files\Hyper-V")) {
+                cinst Microsoft-Hyper-V -Source WindowsFeatures | Out-Default
+            } else {
+                Write-Output "HyperV already installed`r`n"
+            }
+        }
 
+        #if (-not (Test-Path "C:\Program Files\Microsoft SQL Server\MSSQL12.SQLEXPRESS")) {
+        #    Write-Output "Installing SQL Server 2014 Express`r`n"
+        #    if (-not (Test-Path "Installers\SQLEXPRWT_x64_ENU.exe")) {
+        #        # todo: Why isn't this working?
+        #        (new-object net.webclient).DownloadFile("http://care.dlservice.microsoft.com/dl/download/E/A/E/EAE6F7FC-767A-4038-A954-49B8B05D04EB/SQLEXPRWT_x64_ENU.exe", "Installers\SQLEXPRWT_x64_ENU.exe")
+        #    }
+        #    Start-Process -FilePath "Installers\SQLEXPRWT_x64_ENU.exe" -ArgumentList "/QUIETSIMPLE /ACTION=install /FEATURES=SQL,Tools" -Wait
+        #} else {
+        #    Write-Output "Azure Management Studio already installed`r`n"
+        #}
+    } else {
+        Install-ChocolateyPackage notepadplusplus
+        Install-ChocolateyPackage vlc
+        Write-Warning "Install Cisco AnyConnect, Photoshop`r`n"
+    }
+
+    # Pin to taskbar
+    Set-TaskBarPin "C:\Program Files (x86)\Google\Chrome\Application" "chrome.exe"
     
     # Final warnings
     $temp = [IO.Path]::GetTempPath()
@@ -277,6 +308,7 @@ try
     Write-Warning "Check device manager for missing drivers; check graphics drivers; check laptop special buttons work`r`n"
     Write-Warning "Install printers"
     Write-Warning "Configure power options`r`n"
+    Write-Warning "Run Windows Update`r`n"
 
     if ($InTranscript) {
         Stop-Transcript
