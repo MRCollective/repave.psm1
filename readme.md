@@ -93,6 +93,8 @@ Securely prompts for a password and installs the given `$pfx` file to `CurrentUs
 
 Downloads Intel Rapid Storage Technology (RST) to `Installers\SetupRST.exe` unless it's already there and then runs it and outputs a warning to download trimcheck.exe to check if TRIM is enabled for the HDD.
 
+Note: This install isn't unattended - you have to click through the setup. If you know a way of making it unattended that let us know.
+
 ### Install-Git
 
 Install of:

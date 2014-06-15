@@ -56,7 +56,8 @@ function Install-Chocolatey() {
     catch {
         Write-Output "Installing Chocolatey`r`n"
         iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))
-        Add-ToPath "C:\Chocolatey\bin"
+        Add-ToPath "c:\chocolatey\bin"
+        Write-Warning "If the next command fails then (if needed, restart powershell) and run the script again to update the path variables properly`r`n"
     }
 }
 
@@ -106,7 +107,7 @@ function Install-IntelRST() {
         if (-not (Test-Path Installers\SetupRST.exe)) {
             (new-object net.webclient).DownloadFile('http://downloadmirror.intel.com/23496/eng/SetupRST.exe', 'Installers\SetupRST.exe')
         }
-        Start-Process -FilePath Installers\SetupRST.exe -ArgumentList "/quiet" -Wait
+        Start-Process -FilePath Installers\SetupRST.exe -Wait
         Write-Warning "Check http://files.thecybershadow.net/trimcheck/trimcheck-0.6.exe`r`n"
     }
 }
@@ -272,7 +273,7 @@ function Install-VS2013Extension($vsixUrl) {
     $vsixPath = Join-Path ([IO.Path]::GetTempPath()) ($vsixUrl.Substring($vsixUrl.LastIndexOf("/") + 1))
 
     (new-object net.webclient).DownloadFile($vsixUrl, $vsixPath)
-    Start-Process -FilePath "C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\VSIXInstaller.exe" -ArgumentList """$vsixPath"" /quiet" -Wait -RedirectStandardOutput -RedirectStandardError
+    Start-Process -FilePath "C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\VSIXInstaller.exe" -ArgumentList """$vsixPath"" /quiet" -Wait
 }
 
 function Install-ChocolateyPackage {

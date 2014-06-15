@@ -35,8 +35,8 @@ Invoke-Repave {
         Install-VS2013Extension "http://visualstudiogallery.msdn.microsoft.com/1f6ec6ff-e89b-4c47-8e79-d2d68df894ec/file/37912/30/RazorGenerator.vsix"
         Install-VS2013Extension "http://visualstudiogallery.msdn.microsoft.com/71a4e9bd-f660-448f-bd92-f5a65d39b7f0/file/52593/29/chutzpah.visualstudio.vsix"
         Install-VS2013Extension "http://visualstudiogallery.msdn.microsoft.com/f8741f04-bae4-4900-81c7-7c9bfb9ed1fe/file/66979/24/Chutzpah.VS2012.vsix"
+        Install-VS2013Extension "http://visualstudiogallery.msdn.microsoft.com/c6d1c265-7007-405c-a68b-5606af238ece/file/106247/16/SquaredInfinity.VSCommands.VS12.vsix"
     }
-    Install-ChocolateyPackage VS2013.VSCommands
     Install-ChocolateyPackage XUnit.VisualStudio
     Install-ChocolateyPackage ReSharper
     Restore-ReSharperExtensions "packages.config"
