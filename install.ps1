@@ -46,16 +46,28 @@ function Install-VSExtension($vsixUrl) {
     Start-Process -FilePath "C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\VSIXInstaller.exe" -ArgumentList """$vsixPath"" /quiet" -Wait -RedirectStandardOutput -RedirectStandardError
 }
 
-function Install-ChocolateyPackage($packageName, $installArgs) {
+function Install-ChocolateyPackage {
+    [CmdletBinding()]
+    Param (
+        [String]$PackageName,
+        [String]$InstallArgs,
+        $RunIfInstalled
+    )
 
-    if ($global:installedPackages -match "^$packageName \d") {
-        Write-Output "$packageName already installed`r`n"
-    } elseif ($installArgs -ne $null) {
-        Write-Output "cinst $packageName -InstallArguments ""$installArgs""`r`n"
-        iex "cinst $packageName -InstallArguments ""$installArgs""" | Out-Default
+    if ($global:installedPackages -match "^$PackageName \d") {
+        Write-Output "$PackageName already installed`r`n"
     } else {
-        Write-Output "cinst $packageName`r`n"
-        iex "cinst $packageName" | Out-Default
+        if ($InstallArgs -ne $null) {
+            Write-Output "cinst $PackageName -InstallArguments ""$InstallArgs""`r`n"
+            iex "cinst $PackageName -InstallArguments ""$InstallArgs""" | Out-Default
+        } else {
+            Write-Output "cinst $PackageName`r`n"
+            iex "cinst $PackageName" | Out-Default
+        }
+
+        if ($RunIfInstalled -ne $null) {
+            &$RunIfInstalled
+        }
     }
 }
 
@@ -218,8 +230,7 @@ try
     
     # Internet
     Install-ChocolateyPackage GoogleChrome
-    Install-ChocolateyPackage Firefox
-    Write-Warning "Set Firefox to not auto-update if using for Selenium testing`r`n"
+    Install-ChocolateyPackage Firefox -RunIfInstalled { Write-Warning "Set Firefox to not auto-update if using for Selenium testing`r`n" }
     Install-ChocolateyPackage Skype
     Install-ChocolateyPackage Dropbox
 
@@ -248,15 +259,13 @@ try
     # Other
     if ($isRob) {
         Install-ChocolateyPackage vim
-        Install-ChocolateyPackage steam
-        Write-Warning "Restore game backups and save games"
+        Install-ChocolateyPackage steam -RunIfInstalled { Write-Warning "Restore game backups and save games" }
         Install-ChocolateyPackage lastpass
         Install-ChocolateyPackage lockhunter
         Install-ChocolateyPackage nodejs.install
         Install-ChocolateyPackage ruby
         Install-ChocolateyPackage paint.net
-        Install-ChocolateyPackage linqpad4
-        Write-Warning "Register linqpad via: LINQPad.exe -activate=PRODUCT_CODE`r`n"
+        Install-ChocolateyPackage linqpad4 -RunIfInstalled { Write-Warning "Register linqpad via: LINQPad.exe -activate=PRODUCT_CODE`r`n" }
         if (-not (Test-Path "~\Music\iTunes")) {
             if (Test-Path "iTunes") {
                 Write-Output "Copying in iTunes library`r`n"
