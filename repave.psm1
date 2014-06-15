@@ -9,7 +9,7 @@
         mkdir Installers -ErrorAction SilentlyContinue | Out-Null
         $inTranscript = $Host.Name -ne "Windows PowerShell ISE Host"
         if ($inTranscript) {
-            Start-Transcript -path "install.log" -append
+            Start-Transcript -path "repave.log" -append
         } else {
             Write-Warning "This is being executed from PowerShell ISE so there is no transcript at install.log`r`n"
         }
@@ -35,6 +35,17 @@
     }
 }
 
+function Start-Script() {
+    # http://blogs.msdn.com/b/powershell/archive/2007/06/19/get-scriptdirectory.aspx
+    $invocation = (Get-variable -Name MyInvocation -Scope 2).Value
+    $scriptpath = Split-Path $invocation.MyCommand.Path;
+    Set-Variable -Name scriptpath -Value $scriptpath -Scope Global
+    Invoke-Expression "cd $scriptpath"
+
+    # Stop on errors
+    Set-Variable -Name ErrorActionPreference -Value "stop" -Scope Global
+}
+
 function Install-Chocolatey() {
     try {
         (iex "clist -lo") -Replace "^Reading environment variables.+$","" | Set-Variable -Name "installedPackages" -Scope Global
@@ -45,6 +56,7 @@ function Install-Chocolatey() {
     catch {
         Write-Output "Installing Chocolatey`r`n"
         iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))
+        Add-ToPath "C:\Chocolatey\bin"
     }
 }
 
@@ -54,17 +66,6 @@ function Install-WebPI() {
     } else {
         cinst webpicmd -Version 7.1.1374 | Out-Default # Latest version has a bug
     }
-}
-
-function Start-Script() {
-    # http://blogs.msdn.com/b/powershell/archive/2007/06/19/get-scriptdirectory.aspx
-    $invocation = (Get-variable -Name MyInvocation -Scope 2).Value
-    $scriptpath = Split-Path $invocation.MyCommand.Path;
-    Set-Variable -Name scriptpath -Value $scriptpath -Scope Global
-    Invoke-Expression "cd $scriptpath"
-
-    # Stop on errors
-    Set-Variable -Name ErrorActionPreference -Value "stop" -Scope Global
 }
 
 function Get-SourcePath() {
@@ -158,7 +159,7 @@ function Install-VisualStudio2013($product, $features, $onInstall) {
 
 function Install-VisualStudio2013Iso($iso, $onInstall) {
     if (-not (Test-Path "C:\Program Files (x86)\Microsoft Visual Studio 12.0")) {
-        $iso = Join-Path Get-SourcePath $iso
+        $iso = Join-Path (Get-SourcePath) $iso
         Write-Output "Installing VS Ultimate 2013 from .iso`r`n"
         $mount = Mount-DiskImage $iso -PassThru | Get-Volume
         Start-Process -FilePath "$($mount.DriveLetter):\vs_ultimate.exe" -ArgumentList "/passive /norestart" -Wait
@@ -194,8 +195,8 @@ function Install-AzureSDK2.3() {
 
 function Install-Office2013Iso($iso, $msp) {
     if (-not (Test-Path "C:\Program Files\Microsoft Office\Office15")) {
-        $iso = Join-Path Get-SourcePath $iso
-        $msp = Join-Path Get-SourcePath $msp
+        $iso = Join-Path (Get-SourcePath) $iso
+        $msp = Join-Path (Get-SourcePath) $msp
         Write-Output "Installing Office 2013 Professional Plus from .iso`r`n"
         $mount = Mount-DiskImage $iso -PassThru | Get-Volume
         Start-Process -FilePath "$($mount.DriveLetter):\setup.exe" -ArgumentList "/adminfile ""$msp""" -Wait
@@ -266,7 +267,7 @@ function Set-TaskBarPinPaintDotNet() {
     Set-TaskBarPin "C:\Program Files\Paint.NET" "PaintDotNet.exe"
 }
 
-function Install-VSExtension($vsixUrl) {
+function Install-VS2013Extension($vsixUrl) {
     Write-Output "Installing VS extension: $vsixUrl`r`n"
     $vsixPath = Join-Path ([IO.Path]::GetTempPath()) ($vsixUrl.Substring($vsixUrl.LastIndexOf("/") + 1))
 
@@ -285,7 +286,7 @@ function Install-ChocolateyPackage {
     if ($global:installedPackages -match "^$PackageName \d") {
         Write-Output "$PackageName already installed`r`n"
     } else {
-        if ($InstallArgs -ne $null) {
+        if ($InstallArgs -ne $null -and $InstallArgs -ne "") {
             Write-Output "cinst $PackageName -InstallArguments ""$InstallArgs""`r`n"
             iex "cinst $PackageName -InstallArguments ""$InstallArgs""" | Out-Default
         } else {

@@ -1,4 +1,4 @@
-Import-Module "$(Split-Path $MyInvocation.MyCommand.Path)\install.psm1" -Force
+Import-Module "$(Split-Path $MyInvocation.MyCommand.Path)\repave.psm1" -Force
 Invoke-Repave {
 
     # Windows Explorer
@@ -14,10 +14,10 @@ Invoke-Repave {
     
     # Visual Studio
     Install-VisualStudio2013 "Professional" "WebTools" {
-        Install-VSExtension "http://visualstudiogallery.msdn.microsoft.com/6a2ae0fa-bd4e-4712-9170-abe92c63c05c/file/109467/20/MattDavies.TortoiseGitToolbar.vsix"
-        Install-VSExtension "http://visualstudiogallery.msdn.microsoft.com/1f6ec6ff-e89b-4c47-8e79-d2d68df894ec/file/37912/30/RazorGenerator.vsix"
-        Install-VSExtension "http://visualstudiogallery.msdn.microsoft.com/71a4e9bd-f660-448f-bd92-f5a65d39b7f0/file/52593/29/chutzpah.visualstudio.vsix"
-        Install-VSExtension "http://visualstudiogallery.msdn.microsoft.com/f8741f04-bae4-4900-81c7-7c9bfb9ed1fe/file/66979/24/Chutzpah.VS2012.vsix"
+        Install-VS2013Extension "http://visualstudiogallery.msdn.microsoft.com/6a2ae0fa-bd4e-4712-9170-abe92c63c05c/file/109467/20/MattDavies.TortoiseGitToolbar.vsix"
+        Install-VS2013Extension "http://visualstudiogallery.msdn.microsoft.com/1f6ec6ff-e89b-4c47-8e79-d2d68df894ec/file/37912/30/RazorGenerator.vsix"
+        Install-VS2013Extension "http://visualstudiogallery.msdn.microsoft.com/71a4e9bd-f660-448f-bd92-f5a65d39b7f0/file/52593/29/chutzpah.visualstudio.vsix"
+        Install-VS2013Extension "http://visualstudiogallery.msdn.microsoft.com/f8741f04-bae4-4900-81c7-7c9bfb9ed1fe/file/66979/24/Chutzpah.VS2012.vsix"
     }
     Install-ChocolateyPackage VS2013.VSCommands
     Install-ChocolateyPackage XUnit.VisualStudio
