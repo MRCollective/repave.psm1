@@ -4,4 +4,5 @@ Signatures
 iTunes
 .ssh
 *.pfx
-install.log
+repave.log
+*~
