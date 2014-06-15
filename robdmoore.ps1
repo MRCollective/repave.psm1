@@ -9,6 +9,9 @@ if ($update -eq "false") {
 Import-Module "$(Split-Path $MyInvocation.MyCommand.Path)\repave.psm1" -Force
 Invoke-Repave {
 
+    # Timezone
+    tzutil /s "W. Australia Standard Time"
+
     # Windows Explorer
     Set-AdvancedWindowsExplorerOptions
 
@@ -89,13 +92,24 @@ Invoke-Repave {
     Set-TaskBarPinLync2013
     Set-TaskBarPinOneNote2013
     Set-TaskBarPinRDP
-    Set-TaskBarPinSSMS
+    Set-TaskBarPinSSMS2014
+    Set-TaskBarPinSQLProfiler2014
     Set-TaskBarPinPaintDotNet
 
+    mkdir c:\dev\oss -ErrorAction SilentlyContinue | Out-Null
+    mkdir c:\dev\engagements -ErrorAction SilentlyContinue | Out-Null
+    mkdir c:\dev\temp -ErrorAction SilentlyContinue | Out-Null
+
     # Todo
-    # Shift 5 times
+    # Disable Shiftkey 5 times
     # Chrome Extensions
     # Default programs
+    # Add oss and engagements to favourite folders
+    # Local cache NuGet source / CI servers
+    # Set network service as sysadmin on sql
+    # Set VS pin as admin
+    # Install INDCHI-00265280-0042.EXE and SPDTPD-00267239-0042.EXE and REDMCC-00266072-0042.EXE
+    # linqpad activation
     
     # Final warnings
     if ($update -eq "false") {

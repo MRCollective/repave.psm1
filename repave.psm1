@@ -262,8 +262,11 @@ function Set-TaskBarPinOneNote2013() {
 function Set-TaskBarPinRDP() {
     Set-TaskBarPin "C:\Windows\system32" "mstsc.exe"
 }
-function Set-TaskBarPinSSMS() {
-    Set-TaskBarPin "C:\Program Files (x86)\Microsoft SQL Server\110\Tools\Binn\ManagementStudio" "Ssms.exe"
+function Set-TaskBarPinSSMS2014() {
+    Set-TaskBarPin "C:\Program Files (x86)\Microsoft SQL Server\120\Tools\Binn\ManagementStudio" "Ssms.exe"
+}
+function Set-TaskBarPinSQLProfiler2014() {
+    Set-TaskBarPin "C:\Program Files (x86)\Microsoft SQL Server\120\Tools\Binn" "profiler.exe"
 }
 function Set-TaskBarPinPaintDotNet() {
     Set-TaskBarPin "C:\Program Files\Paint.NET" "PaintDotNet.exe"

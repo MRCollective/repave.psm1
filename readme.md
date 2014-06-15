@@ -139,6 +139,8 @@ Copies the given `packages.config` file to `%APPDATA%\JetBrains\ReSharper\vAny` 
 
 Installs Windows Azure SDK 2.3, Windows Azure 2.3 Tools for Visual Studio 2013 and the Windows Azure PowerShell commandlets all using WebPI.
 
+Currently, this doesn't work because the latest version of webpicmd is needed, but it fails due to path issues. If you manually install webpicmd as the latest version and fix the path issues then you can run this successfully.
+
 ### Install-Office2013Iso($iso, $msp)
 
 Installs Office 2013 using the given `.iso` and `.msp` files. Generate a `.msp` by mounting the iso and invoking `setup.exe /admin`.
@@ -187,9 +189,13 @@ Pins OneNote 2013 to the taskbar.
 
 Pins MSTSC (RDP client) to the taskbar.
 
-### Set-TaskBarPinSSMS
+### Set-TaskBarPinSSMS2014
 
-Pins SQL Server Management Studio to the taskbar.
+Pins SQL Server 2014 Management Studio to the taskbar.
+
+### Set-TaskBarPinSQLProfiler2014
+
+Pins SQL Server 2014 Profiler to the taskbar.
 
 ### Set-TaskBarPinPaintDotNet
 
