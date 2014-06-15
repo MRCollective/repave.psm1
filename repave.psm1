@@ -131,6 +131,7 @@ function Install-Git() {
 function Install-IIS() {
     if (-not (Test-Path "c:\inetpub")) {
         cinst IIS-WebServerRole -Source WindowsFeatures | Out-Default
+        cinst IIS-ASPNET45 -Source WindowsFeatures | Out-Default
     } else {
         Write-Output "IIS already installed`r`n"
     }
