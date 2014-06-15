@@ -260,8 +260,12 @@ try
     } else {
         Write-Output "Office 2013 already installed`r`n"
     }
-    if (Test-Path "Signatures") {
-        cp Signatures "$env:APPDATA\Microsoft" -Recurse
+    if (-not (Test-Path "$env:APPDATA\Microsoft\Signatures")) {
+        if (Test-Path "Signatures") {
+            cp Signatures "$env:APPDATA\Microsoft" -Recurse
+        }
+    } else {
+        Write-Output "Outlook signatures already installed`r`n"
     }
 
     # Pin to taskbar
