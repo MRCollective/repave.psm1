@@ -230,3 +230,7 @@ If you have downloaded [SQLEXPRWT_x64_ENU.exe](http://care.dlservice.microsoft.c
 ### Add-Todo $message
 
 Writes a warning of $message and appends that message to `todo.txt`.
+
+### Add-ExplorerFavourite $name, $folder
+
+Adds a favourite link in Windows Explorer with the given name pointing to the given folder location.

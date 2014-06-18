@@ -357,4 +357,11 @@ function Add-Todo($message) {
     Add-Content "todo.txt" "$message`r`n"
 }
 
+function Add-ExplorerFavourite($name, $folder) {
+    $shell = New-Object -ComObject WScript.Shell
+    $link = $shell.CreateShortcut("$env:USERPROFILE\Links\$name.lnk")
+    $link.TargetPath = $folder
+    $link.Save()
+}
+
 Export-ModuleMember -Function *

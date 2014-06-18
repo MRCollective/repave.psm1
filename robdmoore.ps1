@@ -12,8 +12,15 @@ Invoke-Repave {
     # Timezone
     tzutil /s "W. Australia Standard Time"
 
+    # Dev directories
+    mkdir c:\dev\oss -ErrorAction SilentlyContinue | Out-Null
+    mkdir c:\dev\engagements -ErrorAction SilentlyContinue | Out-Null
+    mkdir c:\dev\temp -ErrorAction SilentlyContinue | Out-Null
+
     # Windows Explorer
     Set-AdvancedWindowsExplorerOptions
+    Add-ExplorerFavourite "Projects" "c:\dev\oss"
+    Add-ExplorerFavourite "Engagements" "c:\dev\engagements"
 
     # Encryption.pfx
     if ($update -eq "false") {
@@ -39,6 +46,7 @@ Invoke-Repave {
         Install-VS2013Extension "http://visualstudiogallery.msdn.microsoft.com/71a4e9bd-f660-448f-bd92-f5a65d39b7f0/file/52593/29/chutzpah.visualstudio.vsix"
         Install-VS2013Extension "http://visualstudiogallery.msdn.microsoft.com/f8741f04-bae4-4900-81c7-7c9bfb9ed1fe/file/66979/24/Chutzpah.VS2012.vsix"
         Install-VS2013Extension "http://visualstudiogallery.msdn.microsoft.com/c6d1c265-7007-405c-a68b-5606af238ece/file/106247/16/SquaredInfinity.VSCommands.VS12.vsix"
+        Install-VS2013Extension "http://visualstudiogallery.msdn.microsoft.com/69023d00-a4f9-4a34-a6cd-7e854ba318b5/file/55948/24/SlowCheetah.vsix"
     }
     Install-ChocolateyPackage XUnit.VisualStudio
     Install-ChocolateyPackage ReSharper
@@ -96,19 +104,14 @@ Invoke-Repave {
     Set-TaskBarPinSQLProfiler2014
     Set-TaskBarPinPaintDotNet
 
-    mkdir c:\dev\oss -ErrorAction SilentlyContinue | Out-Null
-    mkdir c:\dev\engagements -ErrorAction SilentlyContinue | Out-Null
-    mkdir c:\dev\temp -ErrorAction SilentlyContinue | Out-Null
-
     # Todo
     # Disable Shiftkey 5 times
     # Chrome Extensions
     # Default programs
-    # Add oss and engagements to favourite folders
     # Local cache NuGet source / CI servers
     # Set network service as sysadmin on sql
     # Set VS pin as admin
-    # Install INDCHI-00265280-0042.EXE and SPDTPD-00267239-0042.EXE and REDMCC-00266072-0042.EXE
+    # Install INDCHI-00265280-0042.EXE and SPDTPD-00267239-0042.EXE and REDMCC-00266072-0042.EXE and NVDVID-00267034-0042.EXE and EP0000295875.exe
     # linqpad activation
     
     # Final warnings
