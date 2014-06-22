@@ -107,7 +107,7 @@ Invoke-Repave {
     # Todo
     # Disable Shiftkey 5 times
     # Chrome Extensions
-    # Default programs
+    # Default programs http://forum.xda-developers.com/showthread.php?p=29456442 vim: js, md, 7z
     # Local cache NuGet source / CI servers
     # Set network service as sysadmin on sql
     # Set VS pin as admin
