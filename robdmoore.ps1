@@ -111,8 +111,9 @@ Invoke-Repave {
     # Local cache NuGet source / CI servers
     # Set network service as sysadmin on sql
     # Set VS pin as admin
-    # Install INDCHI-00265280-0042.EXE and SPDTPD-00267239-0042.EXE and REDMCC-00266072-0042.EXE and NVDVID-00267034-0042.EXE and EP0000295875.exe
+    # Install Sony drivers
     # linqpad activation
+    # ozcode
     
     # Final warnings
     if ($update -eq "false") {
