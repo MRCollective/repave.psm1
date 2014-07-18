@@ -56,7 +56,7 @@ function Install-Chocolatey() {
     catch {
         Write-Output "Installing Chocolatey`r`n"
         iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))
-        Add-ToPath "c:\chocolatey\bin"
+        Add-ToPath "c:\programdata\chocolatey\bin"
         Write-Warning "If the next command fails then restart powershell and run the script again to update the path variables properly`r`n"
     }
 }
