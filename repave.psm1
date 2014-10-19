@@ -81,7 +81,7 @@ function Test-Administrator() {
 
 function Test-VirtualMachine() {
     $objWMI = Get-WmiObject Win32_BaseBoard
-    return ($objWMI.Manufacturer.Tolower() -match 'microsoft') -or ($objWMI.Manufacturer.Tolower() -match 'vmware')
+    return ($objWMI.Manufacturer.Tolower() -match 'microsoft') -or ($objWMI.Manufacturer.Tolower() -match 'vmware') -or ($objWMI.Manufacturer.Tolower() -match 'parallels')
 }
 
 function Set-AdvancedWindowsExplorerOptions() {
