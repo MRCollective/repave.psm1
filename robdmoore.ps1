@@ -85,9 +85,9 @@ Invoke-Repave {
     Install-ChocolateyPackage steam -RunIfInstalled { Add-Todo "Restore game backups and save games" }
     Install-ChocolateyPackage nodejs.install
     Install-ChocolateyPackage ruby
-    Install-ITunesMusicLibrary "iTunes"
-    Install-ChocolateyPackage iTunes
     if (-not (Test-VirtualMachine)) {
+        Install-ITunesMusicLibrary "iTunes"
+        Install-ChocolateyPackage iTunes
         Install-HyperV
     }
     Install-SQLServerExpress2014AndManagementStudio
