@@ -116,6 +116,7 @@ function Install-IntelRST() {
 function Install-Git() {
     Install-ChocolateyPackage TortoiseGit
     Install-ChocolateyPackage poshgit
+    Install-ChocolateyPackage git-credential-winstore
     Add-ToPath "C:\Program Files (x86)\Git\bin"
     if ((Test-Path ".ssh") -and (-not (Test-Path "~\.ssh"))) {
         Write-Output "Copying .ssh to ~`r`n"
