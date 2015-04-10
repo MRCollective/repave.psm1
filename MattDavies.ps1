@@ -9,6 +9,9 @@ Invoke-Repave {
     Install-ChocolateyPackage UrlRewrite
     Install-WebDeploy35
     
+    # Git
+    Install-Git
+    
     # Visual Studio
     #Install-VisualStudio2013 "Professional" "WebTools" {
     #    Install-VS2013Extension "http://visualstudiogallery.msdn.microsoft.com/6a2ae0fa-bd4e-4712-9170-abe92c63c05c/file/109467/20/MattDavies.TortoiseGitToolbar.vsix"
@@ -25,8 +28,6 @@ Invoke-Repave {
     Install-ChocolateyPackage AdobeReader
     Install-ChocolateyPackage notepadplusplus
     Install-ChocolateyPackage vlc
-    Install-ChocolateyPackage git
-    Install-ChocolateyPackage tortoisegit
     Write-Warning "Install Cisco AnyConnect, Photoshop`r`n"
     
     # Internet
