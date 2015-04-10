@@ -1,4 +1,4 @@
-﻿function Invoke-Repave($script) {
+function Invoke-Repave($script) {
     if (-not (Test-Administrator)) {
         Write-Error "Re-open in admin mode`r`n"
         exit 1
@@ -116,8 +116,8 @@ function Install-IntelRST() {
 function Install-Git() {
     Install-ChocolateyPackage TortoiseGit
     Install-ChocolateyPackage poshgit
-    Install-ChocolateyPackage git-credential-winstore
     Add-ToPath "C:\Program Files (x86)\Git\bin"
+    ."C:\Program Files (x86)\git\bin\git" config --global credential.helper wincred
     if ((Test-Path ".ssh") -and (-not (Test-Path "~\.ssh"))) {
         Write-Output "Copying .ssh to ~`r`n"
         cp .ssh $env:userprofile -Recurse
@@ -132,7 +132,7 @@ function Install-Git() {
 function Install-IIS() {
     if (-not (Test-Path "c:\inetpub")) {
         cinst IIS-WebServerRole -Source WindowsFeatures | Out-Default
-        cinst IIS-ASPNET45 -Source WindowsFeatures | Out-Default
+        choco install -y IIS-ASPNET45 -Source WindowsFeatures | Out-Default
     } else {
         Write-Output "IIS already installed`r`n"
     }
@@ -294,11 +294,11 @@ function Install-ChocolateyPackage {
         Write-Output "$PackageName already installed`r`n"
     } else {
         if ($InstallArgs -ne $null -and $InstallArgs -ne "") {
-            Write-Output "cinst $PackageName -InstallArguments ""$InstallArgs""`r`n"
-            iex "cinst $PackageName -InstallArguments ""$InstallArgs""" | Out-Default
+            Write-Output "choo install -y $PackageName -InstallArguments ""$InstallArgs""`r`n"
+            iex "choco install -y $PackageName -InstallArguments ""$InstallArgs""" | Out-Default
         } else {
-            Write-Output "cinst $PackageName`r`n"
-            iex "cinst $PackageName" | Out-Default
+            Write-Output "choco install -y $PackageName`r`n"
+            iex "choco install -y $PackageName" | Out-Default
         }
 
         if ($RunIfInstalled -ne $null) {
@@ -333,7 +333,7 @@ function Install-AzureManagementStudio() {
 
 function Install-HyperV() {
     if (-not (Test-Path "C:\Program Files\Hyper-V")) {
-        cinst Microsoft-Hyper-V -Source WindowsFeatures | Out-Default
+        choco install -y Microsoft-Hyper-V -Source WindowsFeatures | Out-Default
         Write-Warning "Until you restart your computer Hyper-V will not be enabled"
     } else {
         Write-Output "HyperV already installed`r`n"
